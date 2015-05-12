@@ -14,18 +14,18 @@ module Deku
       @deku = @env.require 'deku'
     end
 
-    def render_string tree
-      if tree['constructor']['name'] != 'Application'
-        raise ArgumentError, 'Application instance tree required for rendering'
-      end
-      @deku['renderString'].call tree
+    # @return [String] string rendering of the application tree
+    def render_string application
+      @deku['renderString'].call application.app
     end
 
+    # @param element [ElementNode]
+    # @return [Application]
     def tree element
-      if element['constructor']['name'] != 'ElementNode'
-        raise ArgumentError, 'ElementNode instance required for building a tree'
-      end
-      @deku['tree'].call element
+      # if element['constructor']['name'] != 'ElementNode'
+      #   raise ArgumentError, 'ElementNode instance required for building a tree'
+      # end
+      Application.new(@deku['tree'].call element.node)
     end
 
     private
@@ -33,7 +33,6 @@ module Deku
     def load_path
       File.expand_path('../../../deps/node_modules', __FILE__)
     end
-
   end# Context
 end# Deku
 

@@ -14,15 +14,20 @@ module Deku
       loader_func.call(@mod, @mod.require_function, @mod.exports)
     end
 
+    # @param key [String] retrieve object from component module's exports
+    # @return [Object] JavaScript object
     def [](key)
       @mod.exports[key]
     end
 
+    # @return [Object] call the JavaScript `render()` function of the
+    #   component's module
     def render
-      @mod.exports['render'].call
+      ElementNode.new(@mod.exports['render'].call)
     end
 
     private
+
     def create_loader source
       "( function(module, require, exports) {\n#{source}\n} )"
     end
